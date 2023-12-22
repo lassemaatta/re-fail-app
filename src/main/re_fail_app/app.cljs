@@ -10,7 +10,6 @@
   (rd/render [views/view]
              (.getElementById js/document "root")))
 
-#_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
 (defn ^:dev/after-load clear-cache-and-render!
   []
   (rf/clear-subscription-cache!)
