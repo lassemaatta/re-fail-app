@@ -4,13 +4,13 @@
             ["react-bootstrap/Row" :as Row]))
 
 (defn container
-  [args & children]
-  (into [:> Container args] children))
+  [opts & children]
+  (into [:> Container opts] children))
 
 (defn row
-  [args & children]
-  (into [:> Row args] children))
+  [opts & children]
+  (into [:> Row opts] children))
 
 (defn column
-  [args & children]
-  (into [:> Col args] children))
+  [opts & children]
+  (into [:> Col opts] children))

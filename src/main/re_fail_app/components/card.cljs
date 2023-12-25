@@ -1,45 +1,22 @@
 (ns re-fail-app.components.card
-  (:require ["react-bootstrap/Card" :as Card]
-            [cljs.spec.alpha :as s]))
+  (:require ["react-bootstrap/Card" :as Card]))
 
-(s/def ::header string?)
-(s/def ::footer string?)
-
-(s/fdef card-header
-  :args (s/cat :header ::header))
-
-(defn- card-header
+(defn card-header
   [header]
-  [:> Card/Header
-   {}
-   header])
+  [:> Card/Header {} header])
 
-(s/fdef card-footer
-  :args (s/cat :footer ::footer))
-
-(defn- card-footer
+(defn card-footer
   [footer]
-  [:> Card/Footer
-   {}
-   footer])
+  [:> Card/Footer {} footer])
 
-(defn- card-body
+(defn card-body
   [items]
-  (into [:> Card/Body
-         {}]
+  (into [:> Card/Body {}]
         items))
-
-(s/def ::card (s/keys :opt-un [::header
-                               ::footer]))
-
-(s/fdef card
-  :args (s/cat :args ::card
-               :children (s/* vector?)))
 
 (defn card
   [{:keys [header footer]} & children]
-  [:> Card
-   {}
+  [:> Card {}
    (when header
      [card-header header])
    (when (seq children)
