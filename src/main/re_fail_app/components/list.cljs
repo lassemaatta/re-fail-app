@@ -2,10 +2,12 @@
   (:require ["react-bootstrap/ListGroup" :as ListGroup]))
 
 (defn group
+  "A list group"
   [opts & children]
   (into [:> ListGroup opts] children))
 
 (defn group*
+  "Like [[group]], but takes a sequence of children"
   [opts children]
   [:> ListGroup opts children])
 

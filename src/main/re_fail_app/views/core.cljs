@@ -1,6 +1,8 @@
 (ns re-fail-app.views.core
-  (:require [re-fail-app.components.button :as button]
+  (:require [clojure.string :as str]
+            [re-fail-app.components.button :as button]
             [re-fail-app.components.card :as card]
+            [re-fail-app.components.collapse :as collapse]
             [re-fail-app.components.error :as error]
             [re-fail-app.components.form :as form]
             [re-fail-app.components.grid :as grid]
@@ -8,6 +10,8 @@
             [re-fail-app.components.stack :as stack]
             [re-frame.core :as rf]
             [reagent.core :as r]))
+
+(def <sub (comp deref rf/subscribe))
 
 (defn- generate-todo
   [text]
@@ -35,6 +39,15 @@
   :<- [::todos]
   (fn [todos [_ id]]
     (get todos id)))
+
+(rf/reg-sub ::ids-by-state
+  :<- [::ids]
+  (fn [ids [_ state]]
+    (->> ids
+         (filter (fn [id]
+                   (let [todo (<sub [::by-id id])]
+                     (= state (::state todo)))))
+         doall)))
 
 (rf/reg-sub ::new-todo
   (fn [{::keys [new-todo]}]
@@ -101,8 +114,6 @@
 (rf/reg-sub ::edit-id
   :-> ::editing)
 
-(def <sub (comp deref rf/subscribe))
-
 (defn- edit-title
   [id]
   (let [title (<sub [::edit-title id])]
@@ -159,20 +170,32 @@
          variant (assoc :variant variant))
        [:div
         [:div.fw-bold title]
-        (when (deref *open)
-          (or description "There's no description."))]])))
+        [collapse/collapse {:in (deref *open)}
+         (->> (-> (or description "There's no description.")
+                  (str/split #"\n"))
+              (map (fn [text]
+                     [:p text]))
+              (into [:<>]))]]])))
 
 (defn todo-list
-  []
+  [*id-sub]
   [list/group* {}
-   (for [id (<sub [::ids])]
+   (for [id (deref *id-sub)]
      (cond-> [todo-item id]
        true (with-meta {:key id})))])
 
 (defn todo-list-card
   []
   [card/card {:header "Read-only view of TODOs"}
-   [todo-list]])
+   [:div {:class "mb-3"}
+    [card/text "All TODOs"]
+    [todo-list (rf/subscribe [::ids])]]
+   [:div {:class "mb-3"}
+    [card/text "TODOs in draft state"]
+    [todo-list (rf/subscribe [::ids-by-state :draft])]]
+   [:div
+    [card/text "TODOs in done state"]
+    [todo-list (rf/subscribe [::ids-by-state :done])]]])
 
 (defn edit-state
   [id state]
