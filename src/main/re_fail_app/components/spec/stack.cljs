@@ -11,4 +11,4 @@
 
 (s/fdef stack/stack
   :args (s/cat :opts ::opts
-               :children (s/* ::common/hiccup)))
+               :children ::common/hiccup-vals))

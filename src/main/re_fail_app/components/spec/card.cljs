@@ -17,4 +17,4 @@
 
 (s/fdef card/card
   :args (s/cat :opts ::card
-               :children (s/* ::common/hiccup)))
+               :children ::common/hiccup-vals))

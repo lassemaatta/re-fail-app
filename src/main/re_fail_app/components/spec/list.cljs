@@ -13,12 +13,12 @@
 
 (s/fdef list/group
   :args (s/cat :opts ::group-opts
-               :children (s/* ::common/hiccup)))
+               :children ::common/hiccup-vals))
 
 (s/fdef list/group*
   :args (s/cat :opts ::group-opts
-               :children (s/coll-of ::common/hiccup :kind seq?)))
+               :children ::common/hiccup-seq))
 
 (s/fdef list/item
   :args (s/cat :opts ::item-opts
-               :children (s/* ::common/hiccup)))
+               :children ::common/hiccup-vals))
