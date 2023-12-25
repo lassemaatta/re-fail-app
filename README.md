@@ -1,3 +1,8 @@
+<blockquote>
+  <p>Tärkeintä on se, ettei tee elämässä lainkaan virheitä.</p>
+  &mdash; Kikka Korea @ Musacorner
+</blockquote>
+
 # re-fail-app
 
 ## Development
